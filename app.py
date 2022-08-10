@@ -1,22 +1,31 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from dotenv import dotenv_values
+from configuration import flask_bcrypt
+import os
 
+from API.resources.user import UserRegister, User, UserLogin, UserList
 
-from db import db
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 
-configuration = dotenv_values(".env")
 app = Flask(__name__)
-app.config['MONGOALCHEMY_DATABASE'] = 'Shopping-Cart'
-app.config['MONGOALCHEMY_SERVER'] = 'localhost'
-app.config['MONGOALCHEMY_PORT'] = 27017
-
+app.config['JWT_SECRET_KEY'] = JWT_SECRET_KEY
 api = Api(app)
 
-app.config['JWT_SECRET_KEY'] = configuration['JWT_KEY']
+
+## JWT setup
 jwt = JWTManager(app)
 
+
+
+
+## Route setup
+api.add_resource(UserRegister, '/user/register')
+api.add_resource(User, '/user/<string:user_id>')
+api.add_resource(UserLogin, '/user/login')
+api.add_resource(UserList, '/user')
+
 if __name__ == "__main__":
-    db.init_app(app)
+    flask_bcrypt.init_app(app)
     app.run(port=3000, debug=True)
+
