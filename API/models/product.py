@@ -27,9 +27,9 @@ product_validator = {
                 "description": "must be a string and is required"
             },
             "price": {
-                "bsonType": "int",
+                "bsonType": "double",
                 "minimum": 0,
-                "description": "must be an integer and is required"
+                "description": "must be an double and is required"
             },
             "countInStock": {
                 "bsonType": "int",
