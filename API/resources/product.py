@@ -1,4 +1,5 @@
 from API.models.product import Products
+from API.models.review import Reviews
 from flask_restful import request, reqparse, Resource
 from flask_jwt_extended import jwt_required
 from API.middleware.middleware import admin_required

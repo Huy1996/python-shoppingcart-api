@@ -1,6 +1,6 @@
 from db import db
 
-user_validator = {
+product_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "required": [ "name", "image", "brand", "category", "description",
@@ -76,6 +76,6 @@ try:
 except Exception as e:
     print(e)
 
-db.command("collMod", "Product", validator=user_validator)
+db.command("collMod", "Product", validator=product_validator)
 
 Products = db.Product
