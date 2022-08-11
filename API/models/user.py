@@ -26,11 +26,11 @@ user_validator = {
 }
 
 try:
-    db.create_collection("user")
+    db.create_collection("User")
 except Exception as e:
     print(e)
 
-db.command("collMod", "user", validator=user_validator)
+db.command("collMod", "User", validator=user_validator)
 
-Users = db.user
+Users = db.User
 
