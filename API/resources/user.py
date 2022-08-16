@@ -6,6 +6,7 @@ from pymongo import ReturnDocument
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from API.middleware.middleware import validate_request
 from API.middleware.constant import PAGE_SIZE
+from math import ceil
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument("name", type=str)
@@ -101,9 +102,14 @@ class UserProfile(Resource):
 class UserList(Resource):
     @validate_request(admin_only=True)
     def get(self):
-        page = int(request.args.get("page") or 1)
+        page = int(request.args.get("pageNumber") or 1)
+        count = Users.count_documents({})
         users_list = Users.find({}, {"password": 0})\
             .skip(PAGE_SIZE * (page - 1))\
             .limit(PAGE_SIZE)
         users_list = [{**user, "_id": str(user["_id"])} for user in users_list]
-        return users_list, 200
+        return {
+            "users": users_list,
+            "page": page,
+            "pages": ceil(count / PAGE_SIZE)
+        }, 200

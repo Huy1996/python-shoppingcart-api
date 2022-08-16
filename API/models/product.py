@@ -4,7 +4,7 @@ product_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "required": [ "name", "image", "brand", "category", "description",
-                      "price", "countInStock", "rating", "numReviews", "attribute"],
+                      "price", "countInStock", "rating", "numReviews"],
         "properties": {
             "name": {
                 "bsonType": "string",
@@ -48,7 +48,8 @@ product_validator = {
                 "description": "must be an integer and is required"
             },
             "attribute": {
-                "bsonType": "array",
+                "bsonType": ["array"],
+                "minItems": 0,
                 "items": {
                     "bsonType": "object",
                     "required": ["name", "options"],
@@ -60,12 +61,12 @@ product_validator = {
                         "options": {
                             "bsonType": "array",
                             "items": {
-                                "bsonType": "string",
-                                "description": "must be a string and is required"
-                            },
+                                "bsonType": ["string", "int"]
+                            }
                         }
                     }
-                }
+                },
+                "description": "must be an array and is required"
             }
         }
     }
