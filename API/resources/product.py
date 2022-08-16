@@ -2,7 +2,7 @@ from API.models.product import Products
 from API.models.review import Reviews
 from flask_restful import request, reqparse, Resource
 from flask_jwt_extended import jwt_required
-from API.middleware.middleware import admin_required
+from API.middleware.middleware import validate_request
 
 
 # /product
@@ -10,7 +10,7 @@ class ProductsList(Resource):
     def get(self):
         pass
 
-    @admin_required()
+    @validate_request(admin_only=True)
     def post(self):
         pass
 
@@ -32,17 +32,18 @@ class Product(Resource):
     def get(self, product_id):
         pass
 
-    @admin_required()
+    @validate_request(admin_only=True)
     def put(self, product_id):
         pass
 
-    @admin_required()
+    @validate_request(admin_only=True)
     def delete(self, product_id):
         pass
 
 
 # /product/<string:product_id>/reviews
 class ProductReview(Resource):
-    @jwt_required()
+    @validate_request(admin_only=True)
     def post(self, product_id):
         pass
+

@@ -1,6 +1,6 @@
 import boto3
 from flask_restful import Resource, request
-from API.middleware.middleware import admin_required
+from API.middleware.middleware import validate_request
 from config import S3_KEY, S3_SECRET, S3_BUCKET, S3_REGION
 from time import time_ns
 
@@ -13,7 +13,7 @@ s3 = boto3.client(
 
 
 class Upload(Resource):
-    @admin_required()
+    @validate_request(admin_only=True)
     def post(self):
         file = request.files['file']
         file_name = f'{time_ns()}.jpg'

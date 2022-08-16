@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 from configuration import flask_bcrypt
 from pymongo import ReturnDocument
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
-from API.middleware.middleware import admin_required
+from API.middleware.middleware import validate_request
 from API.middleware.constant import PAGE_SIZE
 
 _user_parser = reqparse.RequestParser()
@@ -33,7 +33,7 @@ class User(Resource):
             return user, 200
         return {'message': "User is not exist"}, 400
 
-    @admin_required()
+    @validate_request(admin_only=True)
     def put(self, user_id):
         _id = ObjectId(user_id)
 
@@ -51,7 +51,7 @@ class User(Resource):
             return user, 200
         return {'message': "User is not exist."}, 400
 
-    @admin_required()
+    @validate_request(admin_only=True)
     def delete(self, user_id):
         _id = ObjectId(user_id)
         Users.delete_one({"_id": _id})
@@ -99,7 +99,7 @@ class UserProfile(Resource):
 
 
 class UserList(Resource):
-    @admin_required()
+    @validate_request(admin_only=True)
     def get(self):
         page = int(request.args.get("page") or 1)
         users_list = Users.find({}, {"password": 0})\
