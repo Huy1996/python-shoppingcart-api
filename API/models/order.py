@@ -27,7 +27,7 @@ order_validator = {
                             "description": "must be a string and is required"
                         },
                         "price": {
-                            "bsonType": "double",
+                            "bsonType": ["decimal", "int", "double"],
                             "minimum": 0,
                             "description": "must be an double greater than 0"
                         },
@@ -94,22 +94,22 @@ order_validator = {
                 }
             },
             "itemsPrice": {
-                "bsonType": "double",
+                "bsonType": ["decimal", "int", "double"],
                 "minimum": 0,
                 "description": "must be a double greater than 0 and is required"
             },
             "shippingPrice": {
-                "bsonType": "double",
+                "bsonType": ["decimal", "int", "double"],
                 "minimum": 0,
                 "description": "must be a double greater than 0 and is required"
             },
             "taxPrice": {
-                "bsonType": "double",
+                "bsonType": ["decimal", "int", "double"],
                 "minimum": 0,
                 "description": "must be a double greater than 0 and is required"
             },
             "totalPrice": {
-                "bsonType": "double",
+                "bsonType": ["decimal", "int", "double"],
                 "minimum": 0,
                 "description": "must be a double greater than 0 and is required"
             },
@@ -158,6 +158,6 @@ try:
 except Exception as e:
     print(e)
 
-db.command("collMod", "Product", validator=order_validator)
+db.command("collMod", "Order", validator=order_validator)
 
 Orders = db.Order
