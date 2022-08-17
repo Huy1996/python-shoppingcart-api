@@ -7,6 +7,7 @@ import os
 from API.resources.user import UserRegister, User, UserLogin, UserList
 from API.resources.upload import Upload
 from API.resources.product import ProductsList, CategoryList, BrandList, Product
+from API.resources.review import UserReview, ProductReview, Review
 
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 
@@ -34,6 +35,10 @@ api.add_resource(ProductsList, '/products')
 api.add_resource(CategoryList, '/products/categories')
 api.add_resource(BrandList, '/products/brands')
 api.add_resource(Product, '/products/<string:product_id>')
+
+api.add_resource(UserReview, '/reviews/user/<string:user_id>')
+api.add_resource(Review, '/reviews/<string:review_id>')
+api.add_resource(ProductReview, '/reviews/product/<string:product_id>')
 
 if __name__ == "__main__":
     flask_bcrypt.init_app(app)
