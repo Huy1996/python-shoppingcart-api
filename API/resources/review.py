@@ -35,13 +35,8 @@ class UserReview(Resource):
                 }
             }
         ])
-        review_list = [{**review,
-                        "_id": str(review["_id"]),
-                        "user": str(review["user"]),
-                        "product": {**review["product"], "_id": str(review["product"]["_id"])},
-                        "timestamps": review["timestamps"].isoformat()
-                        } for review in review_list]
-        return review_list, 200
+
+        return list(review_list), 200
 
 
 class ProductReview(Resource):
@@ -72,12 +67,7 @@ class ProductReview(Resource):
                 }
             }
         ])
-        review_list = [{**review,
-                        "_id": str(review["_id"]),
-                        "user": {**review["user"], "_id": str(review["user"]["_id"])},
-                        "product": str(review["product"]),
-                        "timestamps": review["timestamps"].isoformat()
-                        } for review in review_list]
+
         return review_list, 200
 
 

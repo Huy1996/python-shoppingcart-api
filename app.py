@@ -4,6 +4,8 @@ from flask_jwt_extended import JWTManager
 from configuration import flask_bcrypt
 import os
 
+from API.middleware.middleware import CustomJSONEncoder
+
 from API.resources.user import UserRegister, User, UserLogin, UserList
 from API.resources.upload import Upload
 from API.resources.product import ProductsList, CategoryList, BrandList, Product
@@ -16,6 +18,7 @@ JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = JWT_SECRET_KEY
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['RESTFUL_JSON'] = {'cls': CustomJSONEncoder}
 api = Api(app)
 
 

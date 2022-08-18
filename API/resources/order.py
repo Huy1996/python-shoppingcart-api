@@ -66,13 +66,8 @@ class OrderList(Resource):
             {"$limit": PAGE_SIZE}
 
         ])
-        order_list = [{
-            **order,
-            "_id": str(order["_id"]),
-            "timestamps": order["timestamps"].isoformat()
-        } for order in order_list]
         return {
-                   "order": order_list,
+                   "order": list(order_list),
                    "page": page,
                    "pages": ceil(count / PAGE_SIZE)
                }, 200
@@ -165,15 +160,8 @@ class PersonalOrderList(Resource):
             .skip(PAGE_SIZE * (page - 1)) \
             .limit(PAGE_SIZE)
 
-        order_list = [{
-            **order,
-            "_id": str(order["_id"]),
-            "user": str(order["user"]),
-            "timestamps": order["timestamps"].isoformat()
-        } for order in order_list]
-
         return {
-            "orders": order_list,
+            "orders": list(order_list),
             "page": page,
             "pages": ceil(count / PAGE_SIZE)
         }
@@ -185,12 +173,7 @@ class Order(Resource):
         _id = ObjectId(order_id)
         order = Orders.find_one({"_id": _id})
         if order:
-            return {
-                **order,
-                "_id": str(order["_id"]),
-                "user": str(order["user"]),
-                "timestamps": order["timestamps"].isoformat()
-            }, 200
+            return order, 200
         return {"message": "Order Not Found"}, 404
 
     @validate_request(admin_only=True)
@@ -212,15 +195,8 @@ class UserOrder(Resource):
         count = Orders.count_documents({"user": _id})
         order_list = Orders.find({"user": _id})
 
-        order_list = [{
-            **order,
-            "_id": str(order["_id"]),
-            "user": str(order["user"]),
-            "timestamps": order["timestamps"].isoformat()
-        } for order in order_list]
-
         return {
-            "orders": order_list,
+            "orders": list(order_list),
             "count": count
         }
 

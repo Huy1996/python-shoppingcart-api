@@ -1,7 +1,5 @@
 from API.models.product import Products
-from API.models.review import Reviews
 from flask_restful import request, reqparse, Resource
-from flask_jwt_extended import jwt_required
 from API.middleware.middleware import validate_request
 from pprint import PrettyPrinter
 from API.middleware.constant import PAGE_SIZE
@@ -63,10 +61,9 @@ class ProductsList(Resource):
             .skip(PAGE_SIZE * (page - 1))\
             .limit(PAGE_SIZE)
 
-        product_list = [{**product, "_id": str(product["_id"])} for product in product_list]
 
         return {
-            "products": product_list,
+            "products": list(product_list),
             "page": page,
             "pages": ceil(count / PAGE_SIZE)
         }, 200
@@ -102,7 +99,6 @@ class Product(Resource):
         _id = ObjectId(product_id)
         product = Products.find_one({"_id": _id})
         if product:
-            product["_id"] = product_id
             return product, 200
         else:
             return {"message": "Product Not Found"}, 404

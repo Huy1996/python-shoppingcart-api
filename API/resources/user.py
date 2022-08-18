@@ -30,7 +30,6 @@ class User(Resource):
         _id = ObjectId(user_id)
         user = Users.find_one({"_id": _id}, {"password": 0})
         if user:
-            user["_id"] = user_id
             return user, 200
         return {'message': "User is not exist"}, 400
 
@@ -92,7 +91,6 @@ class UserProfile(Resource):
                                          {"$set": {**data}},
                                          projection={"password": 0},
                                          return_document=ReturnDocument.AFTER)
-        user["_id"] = str(user["_id"])
         return {
             "message": 'User Updated',
             "user": user
@@ -104,12 +102,13 @@ class UserList(Resource):
     def get(self):
         page = int(request.args.get("pageNumber") or 1)
         count = Users.count_documents({})
+
         users_list = Users.find({}, {"password": 0})\
             .skip(PAGE_SIZE * (page - 1))\
             .limit(PAGE_SIZE)
-        users_list = [{**user, "_id": str(user["_id"])} for user in users_list]
+
         return {
-            "users": users_list,
+            "users": list(users_list),
             "page": page,
             "pages": ceil(count / PAGE_SIZE)
         }, 200
